@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\CurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
 
 #[ORM\Entity(repositoryClass: CurrencyRepository::class)]
 class Currency
@@ -12,7 +11,7 @@ class Currency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private Uuid $id;
+    private ?int $currencyId;
 
     #[ORM\Column(length: 40)]
     private string $name;
@@ -21,16 +20,20 @@ class Currency
     private string $currencyCode;
 
     #[ORM\Column]
-    private int $exchangeRate;
+    private float $exchangeRate;
 
-    public function getId(): Uuid
+    public function __construct(string $name, string $currencyCode, float $exchangeRate)
     {
-        return $this->id;
+        $this->currencyId = null;
+        $this->name = $name;
+        $this->currencyCode = $currencyCode;
+        $this->exchangeRate = $exchangeRate;
     }
 
-    public function setId(Uuid $id): void
+
+    public function getCurrencyId(): ?int
     {
-        $this->id = $id;
+        return $this->currencyId;
     }
 
     public function getName(): string
@@ -53,12 +56,12 @@ class Currency
         $this->currencyCode = $currencyCode;
     }
 
-    public function getExchangeRate(): int
+    public function getExchangeRate(): float
     {
         return $this->exchangeRate;
     }
 
-    public function setExchangeRate(int $exchangeRate): void
+    public function setExchangeRate(float $exchangeRate): void
     {
         $this->exchangeRate = $exchangeRate;
     }
